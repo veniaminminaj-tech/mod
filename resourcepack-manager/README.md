@@ -15,8 +15,12 @@ A client-side Minecraft mod project for organizing resource packs, with separate
 ## Current functionality
 
 - Press **K** in-game to open the manager screen.
-- The manager can route to Minecraft's built-in resource-pack selection screen.
+- Open Minecraft's built-in resource-pack selection screen.
+- Open the featured catalog for Faithful 32x, Ashen 16x, and Excalibur.
+- Open official Modrinth pages for performance mods: Sodium, Lithium, FerriteCore, ImmediatelyFast, and Entity Culling.
 - Fabric and NeoForge are maintained as independent Gradle projects.
+
+The featured catalog opens official project pages in your browser. It does **not** bundle or automatically install third-party mods/resource packs; check each project's Minecraft version, loader, dependencies, and license before installing. The manager does not yet hide entries from Minecraft's native Mods menu.
 
 ## Planned / not yet verified
 
@@ -26,6 +30,7 @@ The following should not be considered complete until implemented and tested in-
 - An in-game Modrinth catalog with search and downloads.
 - One-click activation of saved groups.
 - Shader-loader detection and compatible shader-pack integration.
+- Loader-specific local mod-list visibility controls.
 
 Shader support depends on the installed shader mod; there is no single universal Minecraft API for activating shader packs across loaders.
 

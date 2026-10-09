@@ -12,6 +12,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.packs.PackSelectionScreen;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
+import java.awt.Desktop;
+import java.net.URI;
 
 @Mod(ResourcePackManagerForge.MOD_ID)
 public final class ResourcePackManagerForge {
@@ -51,6 +53,17 @@ public final class ResourcePackManagerForge {
         }
     }
 
+    private static void openUrl(String url) {
+        try {
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().browse(URI.create(url));
+            }
+        } catch (Exception exception) {
+            System.err.println("ResourcePack Manager could not open URL: " + url);
+            exception.printStackTrace();
+        }
+    }
+
     private static final class ManagerScreen extends Screen {
         private final Screen parent;
 
@@ -67,8 +80,8 @@ public final class ResourcePackManagerForge {
             addRenderableWidget(Button.builder(Component.literal("Manage Resource Packs"), button -> {
                 Minecraft minecraft = Minecraft.getInstance();
                 minecraft.setScreen(new PackSelectionScreen(
-                        this,
                         minecraft.getResourcePackRepository(),
+                        repository -> minecraft.reloadResourcePacks(),
                         minecraft.getResourcePackDirectory(),
                         Component.literal("Resource Packs")
                 ));
@@ -79,7 +92,7 @@ public final class ResourcePackManagerForge {
                     .bounds(centerX - 145, startY + 25, 290, 20).build());
 
             addRenderableWidget(Button.builder(Component.literal("Browse Modrinth"), button ->
-                    net.minecraft.Util.getPlatform().openUri("https://modrinth.com"))
+                    openUrl("https://modrinth.com"))
                     .bounds(centerX - 145, startY + 50, 290, 20).build());
 
             addRenderableWidget(Button.builder(Component.literal("Close"), button -> onClose())
@@ -108,7 +121,7 @@ public final class ResourcePackManagerForge {
         }
 
         private void open(String url) {
-            net.minecraft.Util.getPlatform().openUri(url);
+            openUrl(url);
         }
 
         @Override

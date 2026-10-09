@@ -1,45 +1,55 @@
-# Holy Church — Forge 1.16.5
+# ResourcePack Manager
 
-Restored and expanded from the user-provided `holychurch_crucifix_bible_1.16.5(1).jar`.
+A client-side Minecraft mod project for **Minecraft Java Edition 1.21.11**, targeting **Fabric** and **NeoForge**.
 
-## Current systems
-- Holy Crucifix: passive protection, monster slowing, temporary resistance barrier and cooldown.
-- Holy Bible: glint + protective resistance while held.
-- Holy Water: drink to cleanse potion effects and receive regeneration/resistance/fire resistance/night vision; sneak-right-click creates a small holy purification burst that damages monsters.
-- Master Key: opens Locked Chests.
-- Locked Chest: cannot be broken in survival without the Master Key.
-- Holy Ground block.
-- Priest profession + trades for Bible, Holy Water and Master Key.
-- A safe server-side ChurchFeature generator class is included for the next world-generation integration step.
+The active project is in `resourcepack-manager/`. The repository root also contains an older Holy Church Forge 1.16.5 project; it is separate from ResourcePack Manager.
 
-## Removed legacy systems
-The restored project does not intentionally include Red Slime Essence, Sift/Candy/Infinite Water dimensions, Portal Gun/Portal GUI, Admin Gun, Knockback Stick, Jail Hammer or the old Crucifix ban/admin behavior.
+## Project details
+
+- **Minecraft:** 1.21.11
+- **Java:** 21
+- **Mod release version:** 0.1.0 (early development)
+- **Loaders:** Fabric and NeoForge
+- **In-game key:** `K`
+
+## Features and development status
+
+- Minecraft-style manager screen / entry point.
+- Opens the game's built-in resource-pack selection screen.
+- Separate loader projects for Fabric and NeoForge.
+
+Planned work that is **not yet complete or runtime-verified**:
+- Save and organize custom resource-pack groups.
+- Browse and download packs from Modrinth in-game.
+- Activate saved groups in one click.
+- Detect supported shader loaders and integrate shader-pack management where possible.
 
 ## Build
-Target: Minecraft 1.16.5, Forge 36.2.34, Java 8.
 
-Run from the project directory after installing a compatible Gradle/ForgeGradle environment:
-`gradle build`
+Install **JDK 21** and use IntelliJ IDEA or Gradle.
 
-The compiled mod will be in `build/libs/`.
+### Fabric
+```bash
+cd resourcepack-manager/fabric
+gradle build
+```
 
+### NeoForge
+```bash
+cd resourcepack-manager/neoforge
+gradle build
+```
 
-## Added in the Church expansion
-- 25x25 vanilla-block church with altar, library, crypt area and bell tower.
-- Strange Grass: edible fantasy food item. Eating it grants 30 seconds of Night Vision and 8 seconds of Nausea.
-- Church generation is attached to biome surface structures and is intentionally rare.
+Built JAR files are normally written to each loader project's `build/libs/` directory.
 
+## Notes
 
-## v3 additions
-- Church altar that grants the Crucifix once per player.
-- Three persistent Church Guardians spawn around the altar.
-- Crypt chamber beneath the altar.
-- Church altar block/model/lang resources.
+- Resource packs can be managed through Minecraft's native pack system.
+- Shader-pack activation depends on a compatible shader mod; Minecraft does not provide a universal shader-pack activation API.
+- This is an early development build. Test in a backup profile/world before using it in a regular installation.
 
+## References
 
-## v4 additions
-- Church Priest is spawned inside generated churches and uses the custom profession.
-- Strange Grass has random supernatural side effects when eaten.
-- Church Guardians remain persistent around the altar.
-
-Build with Forge 1.16.5 MDK and Java 8.
+- [Fabric documentation](https://docs.fabricmc.net/)
+- [NeoForge documentation for 1.21.11](https://docs.neoforged.net/docs/1.21.11/)
+- [Modrinth API documentation](https://docs.modrinth.com/api/operations/searchprojects/)

@@ -39,10 +39,27 @@ dependencies {
     annotationProcessor 'net.minecraftforge:eventbus-validator:7.0.5'
 }
 
+// Capture only the metadata values needed by mods.toml during configuration.
+// This avoids accessing the Gradle Project object from a task action, which is
+// incompatible with Gradle 9's configuration cache.
+def metadataVersion = project.version.toString()
+def modMetadata = [
+    loader_version_range: loader_version_range,
+    mod_license: mod_license,
+    mod_id: mod_id,
+    mod_version: mod_version,
+    mod_name: mod_name,
+    mod_authors: mod_authors,
+    mod_description: mod_description,
+    forge_version_range: forge_version_range,
+    minecraft_version_range: minecraft_version_range
+]
+
 processResources {
-    inputs.property 'version', project.version
+    inputs.property 'version', metadataVersion
+    inputs.properties modMetadata
     filesMatching('META-INF/mods.toml') {
-        expand project.properties
+        expand modMetadata
     }
 }
 

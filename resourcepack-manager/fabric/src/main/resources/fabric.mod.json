@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "resourcepackmanager",
+  "version": "${version}",
+  "name": "ResourcePack Manager",
+  "description": "Organize resource packs and open the pack picker.",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.klewi.rpm.fabric.ResourcePackManagerClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "minecraft": "1.21.11",
+    "java": ">=21",
+    "fabric-api": ">=0.141.1"
+  }
+}

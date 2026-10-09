@@ -1,67 +1,48 @@
-# ResourcePack Manager — Minecraft 1.21.11
+# ResourcePack Manager — Forge 1.21.11
 
-A client-side Minecraft mod project for organizing resource packs, with separate **Fabric** and **NeoForge** builds.
+A client-side Minecraft Java mod project using **Minecraft Forge only**.
 
 ## Compatibility
 
-| Component | Target |
+| Component | Version |
 |---|---|
 | Minecraft Java Edition | 1.21.11 |
+| Forge | 61.2.0 |
 | Java | 21 |
-| Fabric API | 0.141.1+1.21.11 |
-| NeoForge | 21.11.45 |
-| Mod version | 0.1.0 (early development) |
+| Gradle | 9.6.0 |
+| Mod version | 0.2.0 |
 
-## Current functionality
+## Features
 
-- Press **K** in-game to open the manager screen.
+- Press **K** in-game to open ResourcePack Manager.
 - Open Minecraft's built-in resource-pack selection screen.
-- Open the featured catalog for Faithful 32x, Ashen 16x, and Excalibur.
-- Open official Modrinth pages for performance mods: Sodium, Lithium, FerriteCore, ImmediatelyFast, and Entity Culling.
-- Fabric and NeoForge are maintained as independent Gradle projects.
+- Open featured resource-pack project pages: Faithful 32x, Ashen, and Excalibur.
+- Open performance-mod project pages: Sodium, Lithium, FerriteCore, ImmediatelyFast, and Entity Culling.
+- Links open official Modrinth project pages in the browser.
 
-The featured catalog opens official project pages in your browser. It does **not** bundle or automatically install third-party mods/resource packs; check each project's Minecraft version, loader, dependencies, and license before installing. The manager does not yet hide entries from Minecraft's native Mods menu.
+The catalog links to the projects; it does not bundle or automatically install third-party files. Check each project's Minecraft version, Forge support, dependencies, and license before installing. Not every listed performance mod or texture pack necessarily has a Forge build for Minecraft 1.21.11.
 
-## Planned / not yet verified
+## Build
 
-The following should not be considered complete until implemented and tested in-game:
-
-- Saving named resource-pack groups between launches.
-- An in-game Modrinth catalog with search and downloads.
-- One-click activation of saved groups.
-- Shader-loader detection and compatible shader-pack integration.
-- Loader-specific local mod-list visibility controls.
-
-Shader support depends on the installed shader mod; there is no single universal Minecraft API for activating shader packs across loaders.
-
-## Build instructions
-
-Install **JDK 21** first. Run commands from the repository root.
-
-### Fabric
+Install **JDK 21**. From this directory run:
 
 ```bash
-cd resourcepack-manager/fabric
-gradle build
+gradle --no-daemon clean build
 ```
 
-### NeoForge
-
-```bash
-cd resourcepack-manager/neoforge
-gradle build
-```
-
-Look for the resulting JAR in the project's `build/libs/` directory. If Gradle is not installed, open the selected project in IntelliJ IDEA and configure it with a Gradle installation compatible with the project's plugins.
+The JAR is generated in `build/libs/`. GitHub Actions builds the Forge project and uploads the JAR as an artifact.
 
 ## Controls
 
 - **K** — open ResourcePack Manager.
 
+## Project structure
+
+- `forge/` — the active Forge 1.21.11 project.
+- The active CI workflow is `.github/workflows/resourcepack-manager-forge.yml` at repository root.
+
 ## References
 
-- [Fabric documentation](https://docs.fabricmc.net/)
-- [Fabric 1.21.11 build reference](https://github.com/FabricMC/fabric-docs/blob/main/reference/1.21.11/build.gradle)
-- [NeoForge 1.21.11 MDK](https://github.com/NeoForgeMDKs/MDK-1.21.11-NeoGradle)
-- [NeoForge documentation](https://docs.neoforged.net/docs/1.21.11/)
-- [Modrinth API](https://docs.modrinth.com/api/operations/searchprojects/)
+- [Forge 1.21.11 downloads and MDK](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.21.11.html)
+- [ForgeGradle example for Minecraft 1.21.11](https://github.com/MinecraftForge/MDKExamples/tree/master/traditional-mdk/fg7)
+- [Modrinth](https://modrinth.com/)

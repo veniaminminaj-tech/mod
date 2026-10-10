@@ -28,7 +28,8 @@ public final class ResourcePackManagerForge {
         // Client-only behavior is registered by the nested event subscribers below.
     }
 
-    @Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    // Key mappings are registered on the MOD event bus.
+    @Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
     public static final class ModEvents {
         private static KeyMapping openManager;
 
@@ -43,7 +44,8 @@ public final class ResourcePackManagerForge {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
+    // Client ticks are Forge events, so this subscriber uses the FORGE event bus.
+    @Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static final class ClientEvents {
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent.Post event) {
@@ -106,7 +108,6 @@ public final class ResourcePackManagerForge {
             addRenderableWidget(Button.builder(Component.literal("Close"), button -> onClose())
                     .bounds(centerX - 145, startY + 75, 290, 20).build());
         }
-
 
         private void checkModrinthConnection(Button button) {
             HttpClient client = HttpClient.newBuilder()

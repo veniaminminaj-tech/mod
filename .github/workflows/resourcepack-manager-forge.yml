@@ -34,6 +34,9 @@ jobs:
       - name: Build Forge mod
         run: gradle --no-daemon clean build
 
+      - name: Verify mod JAR contents
+        run: gradle --no-daemon verifyModJar --stacktrace
+
       - name: Upload Forge mod
         uses: actions/upload-artifact@v4
         with:

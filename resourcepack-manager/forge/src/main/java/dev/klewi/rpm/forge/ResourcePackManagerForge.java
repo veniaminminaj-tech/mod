@@ -162,7 +162,7 @@ public final class ResourcePackManagerForge {
 
         @Override
         public void render(net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-            renderBackground(graphics, mouseX, mouseY, delta);
+            graphics.fill(0, 0, width, height, 0xC0101010);
             graphics.drawCenteredString(font, title, width / 2, height / 2 - 72, 0xFFFFFF);
             graphics.drawCenteredString(font, "Made by Notnoob23", width / 2, height - 18, 0xAAAAAA);
             super.render(graphics, mouseX, mouseY, delta);
@@ -195,7 +195,7 @@ public final class ResourcePackManagerForge {
 
         @Override
         public void render(net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-            renderBackground(graphics, mouseX, mouseY, delta);
+            graphics.fill(0, 0, width, height, 0xC0101010);
             graphics.drawCenteredString(font, title, width / 2, height / 2 - 60, 0xFFFFFF);
             graphics.drawCenteredString(font, "The shortcut can be changed in Minecraft Controls.", width / 2, height / 2 - 40, 0xAAAAAA);
             super.render(graphics, mouseX, mouseY, delta);
@@ -257,7 +257,7 @@ public final class ResourcePackManagerForge {
 
         @Override
         public void render(net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-            renderBackground(graphics, mouseX, mouseY, delta);
+            graphics.fill(0, 0, width, height, 0xC0101010);
             graphics.drawCenteredString(font, title, width / 2, 12, 0xFFFFFF);
             graphics.drawCenteredString(font, "Opens official project pages in your browser", width / 2, 24, 0xAAAAAA);
             super.render(graphics, mouseX, mouseY, delta);

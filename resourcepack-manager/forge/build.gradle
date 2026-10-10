@@ -79,3 +79,33 @@ tasks.named('jar', Jar).configure {
         ])
     }
 }
+
+
+// Verify the built artifact contains the essential Forge mod files.
+tasks.register('verifyModJar') {
+    group = 'verification'
+    description = 'Checks that the built JAR contains the mod metadata and main client classes.'
+    dependsOn tasks.named('jar')
+
+    doLast {
+        def archive = tasks.named('jar', Jar).get().archiveFile.get().asFile
+        if (!archive.isFile()) {
+            throw new GradleException("Mod JAR was not created: ${archive}")
+        }
+
+        def requiredEntries = [
+            'META-INF/mods.toml',
+            'dev/klewi/rpm/forge/ResourcePackManagerForge.class',
+            'dev/klewi/rpm/forge/ModrinthBrowserScreen.class'
+        ]
+
+        new java.util.zip.ZipFile(archive).withCloseable { zip ->
+            def missing = requiredEntries.findAll { zip.getEntry(it) == null }
+            if (!missing.isEmpty()) {
+                throw new GradleException("Mod JAR is missing required entries: ${missing.join(', ')}")
+            }
+        }
+
+        logger.lifecycle("Verified mod JAR: ${archive.name}")
+    }
+}

@@ -4,6 +4,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -41,6 +44,20 @@ public final class ResourcePackManagerForge {
                     KeyMapping.Category.MISC
             );
             event.register(openManager);
+        }
+    }
+
+    // Add a visible entry point on both the title screen and the in-game pause menu.
+    @Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static final class GuiEvents {
+        @SubscribeEvent
+        public static void onScreenInit(ScreenEvent.Init.Post event) {
+            Screen screen = event.getScreen();
+            if (screen instanceof TitleScreen || screen instanceof PauseScreen) {
+                event.addListener(Button.builder(Component.literal("ResourcePack Manager"), button ->
+                        Minecraft.getInstance().setScreen(new ManagerScreen(screen)))
+                        .bounds(8, 8, 150, 20).build());
+            }
         }
     }
 
@@ -105,8 +122,11 @@ public final class ResourcePackManagerForge {
             modrinthButton.active = false;
             checkModrinthConnection(modrinthButton);
 
+            addRenderableWidget(Button.builder(Component.literal("Settings"), button ->
+                    Minecraft.getInstance().setScreen(new SettingsScreen(this)))
+                    .bounds(centerX - 145, startY + 75, 140, 20).build());
             addRenderableWidget(Button.builder(Component.literal("Close"), button -> onClose())
-                    .bounds(centerX - 145, startY + 75, 290, 20).build());
+                    .bounds(centerX + 5, startY + 75, 140, 20).build());
         }
 
         private void checkModrinthConnection(Button button) {
@@ -145,6 +165,39 @@ public final class ResourcePackManagerForge {
             renderBackground(graphics, mouseX, mouseY, delta);
             graphics.drawCenteredString(font, title, width / 2, height / 2 - 72, 0xFFFFFF);
             graphics.drawCenteredString(font, "Made by Notnoob23", width / 2, height - 18, 0xAAAAAA);
+            super.render(graphics, mouseX, mouseY, delta);
+        }
+
+        @Override
+        public void onClose() {
+            Minecraft.getInstance().setScreen(parent);
+        }
+    }
+
+    private static final class SettingsScreen extends Screen {
+        private final Screen parent;
+
+        private SettingsScreen(Screen parent) {
+            super(Component.literal("ResourcePack Manager Settings"));
+            this.parent = parent;
+        }
+
+        @Override
+        protected void init() {
+            int cx = width / 2;
+            addRenderableWidget(Button.builder(Component.literal("Open menu key: K (change in Options → Controls)"), button -> {
+                Minecraft.getInstance().setScreen(new net.minecraft.client.OptionsScreen(this, Minecraft.getInstance().options));
+            }).bounds(cx - 155, height / 2 - 20, 310, 20).build());
+            addRenderableWidget(Button.builder(Component.literal("Back"), button ->
+                    Minecraft.getInstance().setScreen(parent))
+                    .bounds(cx - 75, height / 2 + 12, 150, 20).build());
+        }
+
+        @Override
+        public void render(net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+            renderBackground(graphics, mouseX, mouseY, delta);
+            graphics.drawCenteredString(font, title, width / 2, height / 2 - 60, 0xFFFFFF);
+            graphics.drawCenteredString(font, "The shortcut can be changed in Minecraft Controls.", width / 2, height / 2 - 40, 0xAAAAAA);
             super.render(graphics, mouseX, mouseY, delta);
         }
 

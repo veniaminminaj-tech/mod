@@ -50,7 +50,7 @@ public final class ResourcePackManagerClient implements ClientModInitializer {
             addRenderableWidget(Button.builder(Component.literal("Browse Modrinth"), b ->
                     net.minecraft.Util.getPlatform().openUri("https://modrinth.com"))
                     .bounds(cx - 110, y + 50, 220, 20).build());
-            addRenderableWidget(Button.builder(Component.literal("Close"), b -> onClose())
+            addRenderableWidget(Button.builder(Component.literal("Exit"), b -> onClose())
                     .bounds(cx - 110, y + 75, 220, 20).build());
         }
 
@@ -103,7 +103,7 @@ public final class ResourcePackManagerClient implements ClientModInitializer {
             addRenderableWidget(Button.builder(Component.literal("Entity Culling — Skip unseen entities"), b ->
                     open("https://modrinth.com/mod/entityculling"))
                     .bounds(cx - 145, y + 174, 290, 20).build());
-            addRenderableWidget(Button.builder(Component.literal("Back"), b ->
+            addRenderableWidget(Button.builder(Component.literal("Exit"), b ->
                     Minecraft.getInstance().setScreen(parent))
                     .bounds(cx - 145, y + 204, 290, 20).build());
         }

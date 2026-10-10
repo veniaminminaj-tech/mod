@@ -143,6 +143,7 @@ public final class ResourcePackManagerForge {
         public void render(net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY, float delta) {
             renderBackground(graphics, mouseX, mouseY, delta);
             graphics.drawCenteredString(font, title, width / 2, height / 2 - 72, 0xFFFFFF);
+            graphics.drawCenteredString(font, "Made by Notnoob23", width / 2, height - 18, 0xAAAAAA);
             super.render(graphics, mouseX, mouseY, delta);
         }
 

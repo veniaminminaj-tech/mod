@@ -28,7 +28,7 @@ public final class ResourcePackManagerForge {
         // Client-only behavior is registered by the nested event subscribers below.
     }
 
-    @Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.GAME)
+    @Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static final class ModEvents {
         private static KeyMapping openManager;
 

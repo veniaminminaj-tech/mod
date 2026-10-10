@@ -166,6 +166,9 @@ public final class ModrinthBrowserScreen extends Screen {
                             Files.copy(input, target, StandardCopyOption.REPLACE_EXISTING);
                         }
                         Minecraft.getInstance().execute(() -> status = "Downloaded " + fileName + ". Open Manage Resource Packs to enable it.");
+                    } catch (InterruptedException interrupted) {
+                        Thread.currentThread().interrupt();
+                        throw new java.util.concurrent.CompletionException(interrupted);
                     } catch (java.io.IOException io) {
                         throw new java.util.concurrent.CompletionException(io);
                     }

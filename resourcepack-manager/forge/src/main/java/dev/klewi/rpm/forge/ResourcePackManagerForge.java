@@ -186,7 +186,7 @@ public final class ResourcePackManagerForge {
         protected void init() {
             int cx = width / 2;
             addRenderableWidget(Button.builder(Component.literal("Change menu shortcut (currently K)"), button -> {
-                Minecraft.getInstance().setScreen(new net.minecraft.client.gui.screens.OptionsScreen(this, Minecraft.getInstance().options));
+                Minecraft.getInstance().setScreen(new net.minecraft.client.gui.screens.options.OptionsScreen(this, Minecraft.getInstance().options));
             }).bounds(cx - 155, height / 2 - 20, 310, 20).build());
             addRenderableWidget(Button.builder(Component.literal("Back"), button ->
                     Minecraft.getInstance().setScreen(parent))

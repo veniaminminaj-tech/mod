@@ -65,7 +65,6 @@ public final class ModrinthBrowserScreen extends Screen {
         status = "Searching Modrinth…";
         results.clear();
         pageOffset = 0;
-        clearResultButtons();
         String url = "https://api.modrinth.com/v2/search?facets=%5B%5B%22project_type%3Aresourcepack%22%5D%5D&limit=20&query="
                 + URLEncoder.encode(query, StandardCharsets.UTF_8);
         HttpRequest request = HttpRequest.newBuilder(URI.create(url))
@@ -102,16 +101,12 @@ public final class ModrinthBrowserScreen extends Screen {
         return object.has(key) && !object.get(key).isJsonNull() ? object.get(key).getAsString() : fallback;
     }
 
-    private void clearResultButtons() {
-        // Rebuild the screen widgets so result buttons do not accumulate.
-        clearWidgets();
-        init();
-    }
-
     private void renderResults() {
+        String currentQuery = searchBox == null ? "" : searchBox.getValue();
         clearWidgets();
         int cx = width / 2;
         searchBox = new EditBox(font, cx - 155, 36, 230, 20, Component.literal("Search resource packs"));
+        searchBox.setValue(currentQuery);
         searchBox.setHint(Component.literal("e.g. Faithful, medieval, PvP"));
         addRenderableWidget(searchBox);
         addRenderableWidget(Button.builder(Component.literal("Search"), b -> search())

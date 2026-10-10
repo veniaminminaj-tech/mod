@@ -125,7 +125,7 @@ public final class ResourcePackManagerForge {
             addRenderableWidget(Button.builder(Component.literal("Settings"), button ->
                     Minecraft.getInstance().setScreen(new SettingsScreen(this)))
                     .bounds(centerX - 145, startY + 75, 140, 20).build());
-            addRenderableWidget(Button.builder(Component.literal("Close"), button -> onClose())
+            addRenderableWidget(Button.builder(Component.literal("Exit"), button -> onClose())
                     .bounds(centerX + 5, startY + 75, 140, 20).build());
         }
 
@@ -188,8 +188,7 @@ public final class ResourcePackManagerForge {
             addRenderableWidget(Button.builder(Component.literal("Change menu shortcut (currently K)"), button -> {
                 Minecraft.getInstance().setScreen(new net.minecraft.client.gui.screens.options.OptionsScreen(this, Minecraft.getInstance().options));
             }).bounds(cx - 155, height / 2 - 20, 310, 20).build());
-            addRenderableWidget(Button.builder(Component.literal("Back"), button ->
-                    Minecraft.getInstance().setScreen(parent))
+            addRenderableWidget(Button.builder(Component.literal("Exit"), button -> onClose())
                     .bounds(cx - 75, height / 2 + 12, 150, 20).build());
         }
 

@@ -1,0 +1,10 @@
+{
+  "pack": {
+    "description": {
+      "text": "ResourcePack Manager resources",
+      "color": "gray"
+    },
+    "min_format": [75, 0],
+    "max_format": [75, 0]
+  }
+}

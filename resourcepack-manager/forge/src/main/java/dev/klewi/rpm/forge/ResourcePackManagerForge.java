@@ -14,6 +14,11 @@ import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 import java.awt.Desktop;
 import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
 
 @Mod(ResourcePackManagerForge.MOD_ID)
 public final class ResourcePackManagerForge {
@@ -91,12 +96,47 @@ public final class ResourcePackManagerForge {
                     Minecraft.getInstance().setScreen(new CatalogScreen(this)))
                     .bounds(centerX - 145, startY + 25, 290, 20).build());
 
-            addRenderableWidget(Button.builder(Component.literal("Browse Modrinth"), button ->
-                    openUrl("https://modrinth.com"))
+            Button modrinthButton = addRenderableWidget(Button.builder(
+                    Component.literal("Modrinth (checking internet...)"), button ->
+                    Minecraft.getInstance().setScreen(new ModrinthBrowserScreen(this)))
                     .bounds(centerX - 145, startY + 50, 290, 20).build());
+            modrinthButton.active = false;
+            checkModrinthConnection(modrinthButton);
 
             addRenderableWidget(Button.builder(Component.literal("Close"), button -> onClose())
                     .bounds(centerX - 145, startY + 75, 290, 20).build());
+        }
+
+
+        private void checkModrinthConnection(Button button) {
+            HttpClient client = HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(4))
+                    .followRedirects(HttpClient.Redirect.NORMAL)
+                    .build();
+            HttpRequest request = HttpRequest.newBuilder(URI.create("https://api.modrinth.com/v2"))
+                    .timeout(Duration.ofSeconds(5))
+                    .header("User-Agent", "KlewiResourcePackManager/0.3.0")
+                    .GET()
+                    .build();
+
+            CompletableFuture.runAsync(() -> {
+                boolean online = false;
+                try {
+                    HttpResponse<Void> response = client.send(
+                            request, HttpResponse.BodyHandlers.discarding());
+                    online = response.statusCode() >= 200 && response.statusCode() < 500;
+                } catch (Exception ignored) {
+                    // Keep the Modrinth button disabled when the API cannot be reached.
+                }
+                final boolean available = online;
+                Minecraft.getInstance().execute(() -> {
+                    if (Minecraft.getInstance().screen != this) return;
+                    button.active = available;
+                    button.setMessage(Component.literal(available
+                            ? "Modrinth Resource Packs"
+                            : "Modrinth (no internet connection)"));
+                });
+            });
         }
 
         @Override

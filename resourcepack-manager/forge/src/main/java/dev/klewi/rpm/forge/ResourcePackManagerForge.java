@@ -111,22 +111,15 @@ public final class ResourcePackManagerForge {
                 ));
             }).bounds(centerX - 145, startY, 290, 20).build());
 
-            addRenderableWidget(Button.builder(Component.literal("Featured Packs & Performance Mods"), button ->
-                    Minecraft.getInstance().setScreen(new CatalogScreen(this)))
-                    .bounds(centerX - 145, startY + 25, 290, 20).build());
-
-            Button modrinthButton = addRenderableWidget(Button.builder(
-                    Component.literal("Modrinth (checking internet...)"), button ->
+            addRenderableWidget(Button.builder(Component.literal("Modrinth — Resource Packs & Mods"), button ->
                     Minecraft.getInstance().setScreen(new ModrinthBrowserScreen(this)))
-                    .bounds(centerX - 145, startY + 50, 290, 20).build());
-            modrinthButton.active = false;
-            checkModrinthConnection(modrinthButton);
+                    .bounds(centerX - 145, startY + 25, 290, 20).build());
 
             addRenderableWidget(Button.builder(Component.literal("Settings"), button ->
                     Minecraft.getInstance().setScreen(new SettingsScreen(this)))
-                    .bounds(centerX - 145, startY + 75, 140, 20).build());
+                    .bounds(centerX - 145, startY + 50, 140, 20).build());
             addRenderableWidget(Button.builder(Component.literal("Exit"), button -> onClose())
-                    .bounds(centerX + 5, startY + 75, 140, 20).build());
+                    .bounds(centerX + 5, startY + 50, 140, 20).build());
         }
 
         private void checkModrinthConnection(Button button) {

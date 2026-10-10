@@ -156,15 +156,19 @@ public final class ModrinthBrowserScreen extends Screen {
                     if (!fileName.toLowerCase().endsWith(".zip")) throw new IllegalStateException("Not a ZIP resource pack");
                     HttpRequest fileRequest = HttpRequest.newBuilder(URI.create(fileUrl))
                             .timeout(Duration.ofMinutes(2)).header("User-Agent", "KlewiResourcePackManager/0.3.0").GET().build();
-                    HttpResponse<InputStream> response = HTTP.send(fileRequest, HttpResponse.BodyHandlers.ofInputStream());
-                    Path targetDir = Minecraft.getInstance().getResourcePackDirectory();
-                    Files.createDirectories(targetDir);
-                    Path target = targetDir.resolve(fileName).normalize();
-                    if (!target.getParent().equals(targetDir.normalize())) throw new IllegalStateException("Invalid file name");
-                    try (InputStream input = response.body()) {
-                        Files.copy(input, target, StandardCopyOption.REPLACE_EXISTING);
+                    try {
+                        HttpResponse<InputStream> response = HTTP.send(fileRequest, HttpResponse.BodyHandlers.ofInputStream());
+                        Path targetDir = Minecraft.getInstance().getResourcePackDirectory();
+                        Files.createDirectories(targetDir);
+                        Path target = targetDir.resolve(fileName).normalize();
+                        if (!target.getParent().equals(targetDir.normalize())) throw new IllegalStateException("Invalid file name");
+                        try (InputStream input = response.body()) {
+                            Files.copy(input, target, StandardCopyOption.REPLACE_EXISTING);
+                        }
+                        Minecraft.getInstance().execute(() -> status = "Downloaded " + fileName + ". Open Manage Resource Packs to enable it.");
+                    } catch (java.io.IOException io) {
+                        throw new java.util.concurrent.CompletionException(io);
                     }
-                    Minecraft.getInstance().execute(() -> status = "Downloaded " + fileName + ". Open Manage Resource Packs to enable it.");
                 })
                 .exceptionally(error -> {
                     Minecraft.getInstance().execute(() -> status = "Download unavailable for Minecraft 1.21.11 Forge, or the network failed.");

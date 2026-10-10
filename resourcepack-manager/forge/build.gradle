@@ -63,6 +63,13 @@ processResources {
     }
 }
 
+// The sources JAR must not contain raw Forge metadata. Otherwise, placing
+// the -sources.jar in the mods folder makes Forge parse unexpanded placeholders
+// such as ${mod_id} and abort mod discovery.
+tasks.named('sourcesJar', Jar).configure {
+    exclude 'META-INF/mods.toml'
+}
+
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }

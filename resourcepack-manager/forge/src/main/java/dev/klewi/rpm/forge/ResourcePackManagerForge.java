@@ -7,7 +7,6 @@ import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.PauseScreen;
-import net.minecraft.client.gui.screens.controls.KeyBindsScreen;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -187,7 +186,7 @@ public final class ResourcePackManagerForge {
         protected void init() {
             int cx = width / 2;
             addRenderableWidget(Button.builder(Component.literal("Change menu shortcut (currently K)"), button -> {
-                Minecraft.getInstance().setScreen(new KeyBindsScreen(this, Minecraft.getInstance().options));
+                Minecraft.getInstance().setScreen(new net.minecraft.client.OptionsScreen(this, Minecraft.getInstance().options));
             }).bounds(cx - 155, height / 2 - 20, 310, 20).build());
             addRenderableWidget(Button.builder(Component.literal("Back"), button ->
                     Minecraft.getInstance().setScreen(parent))

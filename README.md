@@ -1,8 +1,10 @@
 # ResourcePack Manager — Forge
 
-Client-side Minecraft Java mod for **Minecraft 1.21.11**, now built with **Minecraft Forge only**.
+<p align="center">
+  <img src="resourcepack-manager/assets/resourcepack-manager.svg" alt="Pixel-art ResourcePack Manager illustration" width="640">
+</p>
 
-The active project is in `resourcepack-manager/forge/`. Older Fabric and NeoForge project folders are retained as legacy files but are no longer built by the ResourcePack Manager workflow. The repository also contains a separate older Holy Church Forge 1.16.5 project.
+A client-side Minecraft Java mod for **Minecraft 1.21.11**, built for **Minecraft Forge**.
 
 ## Project details
 
@@ -28,14 +30,14 @@ Install **JDK 21** and Gradle 9.6.0, then run:
 
 ```bash
 cd resourcepack-manager/forge
-gradle --no-daemon clean build
+gradle --no-daemon clean build verifyModJar
 ```
 
-The resulting JAR is written to `resourcepack-manager/forge/build/libs/`. GitHub Actions builds the Forge project and uploads the JAR as an artifact.
+The JAR is written to `resourcepack-manager/forge/build/libs/`. GitHub Actions builds this Forge project and uploads the JAR as a workflow artifact.
 
-## Status
+## CI
 
-This is an early development build. The Gradle configuration and Forge-only CI workflow have been added, but the build must pass in GitHub Actions before the JAR can be considered verified.
+The workflow runs on pushes, pull requests, and manual dispatch. It uses Java 21 and Gradle 9.6.0, builds the Forge project in its own directory, verifies required JAR entries, and uploads the artifact only after successful verification.
 
 ## References
 

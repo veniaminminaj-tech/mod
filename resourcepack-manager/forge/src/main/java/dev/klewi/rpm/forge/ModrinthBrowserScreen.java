@@ -37,7 +37,7 @@ public final class ModrinthBrowserScreen extends Screen {
     private int pageOffset;
 
     public ModrinthBrowserScreen(Screen parent) {
-        super(Component.literal("Modrinth Resource Packs"));
+        super(Component.literal("Modrinth — Resource Packs & Mods"));
         this.parent = parent;
     }
 

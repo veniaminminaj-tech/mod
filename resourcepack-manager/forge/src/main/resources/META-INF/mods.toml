@@ -1,0 +1,25 @@
+modLoader="javafml"
+loaderVersion="[61,)"
+license="MIT"
+clientSideOnly=true
+
+[[mods]]
+modId="resourcepackmanager"
+version="0.2.0"
+displayName="ResourcePack Manager"
+authors="Klewi"
+description='''Client-side resource pack manager with links to featured resource packs and performance mods.'''
+
+[[dependencies.resourcepackmanager]]
+modId="forge"
+mandatory=true
+versionRange="[61,)"
+ordering="NONE"
+side="CLIENT"
+
+[[dependencies.resourcepackmanager]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.21.11,1.22)"
+ordering="NONE"
+side="CLIENT"

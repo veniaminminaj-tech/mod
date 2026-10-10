@@ -1,0 +1,45 @@
+name: ResourcePack Manager (Forge)
+
+on:
+  push:
+    paths:
+      - 'resourcepack-manager/forge/**'
+      - '.github/workflows/resourcepack-manager-forge.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-forge:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: resourcepack-manager/forge
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle 9.6.0
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.6.0'
+
+      - name: Build Forge mod
+        run: gradle --no-daemon clean build
+
+      - name: Verify mod JAR contents
+        run: gradle --no-daemon verifyModJar --stacktrace
+
+      - name: Upload Forge mod
+        uses: actions/upload-artifact@v4
+        with:
+          name: resourcepack-manager-forge-1.21.11
+          path: resourcepack-manager/forge/build/libs/*.jar
+          if-no-files-found: error

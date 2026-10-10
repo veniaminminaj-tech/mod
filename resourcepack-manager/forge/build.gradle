@@ -1,0 +1,125 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[7.0.29,8.0)'
+}
+
+version = mod_version
+group = mod_group_id
+base.archivesName = mod_id
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
+
+minecraft {
+    mappings channel: mapping_channel, version: mapping_version
+    runs {
+        configureEach {
+            workingDir = layout.projectDirectory.dir('run')
+        }
+        register('client') {
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+        }
+    }
+}
+
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    mavenCentral()
+}
+
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0.5'
+}
+
+// Capture only the metadata values needed by mods.toml during configuration.
+// This avoids accessing the Gradle Project object from a task action, which is
+// incompatible with Gradle 9's configuration cache.
+def metadataVersion = project.version.toString()
+def modMetadata = [
+    loader_version_range: loader_version_range,
+    mod_license: mod_license,
+    mod_id: mod_id,
+    mod_version: mod_version,
+    mod_name: mod_name,
+    mod_authors: mod_authors,
+    mod_description: mod_description,
+    forge_version_range: forge_version_range,
+    minecraft_version_range: minecraft_version_range
+]
+
+processResources {
+    inputs.property 'version', metadataVersion
+    inputs.properties modMetadata
+    filesMatching('META-INF/mods.toml') {
+        expand modMetadata
+    }
+}
+
+// The sources JAR must not contain raw Forge metadata. Otherwise, placing
+// the -sources.jar in the mods folder makes Forge parse unexpanded placeholders
+// such as ${mod_id} and abort mod discovery.
+tasks.named('sourcesJar', Jar).configure {
+    exclude 'META-INF/mods.toml'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+            'Specification-Title': mod_id,
+            'Specification-Vendor': mod_authors,
+            'Specification-Version': '1',
+            'Implementation-Title': project.name,
+            'Implementation-Version': project.jar.archiveVersion,
+            'Implementation-Vendor': mod_authors
+        ])
+    }
+}
+
+
+// Verify the built artifact contains the essential Forge mod files.
+// Resolve task providers during configuration, not inside the task action, so
+// this task is compatible with Gradle's configuration cache.
+def modJarTask = tasks.named('jar', Jar)
+def modJarArchive = modJarTask.flatMap { it.archiveFile }
+
+tasks.register('verifyModJar') {
+    group = 'verification'
+    description = 'Checks that the built JAR contains the mod metadata and main client classes.'
+    dependsOn modJarTask
+    inputs.file(modJarArchive)
+
+    doLast {
+        // Read the declared task input rather than looking up another task here.
+        def archive = inputs.files.singleFile
+        if (!archive.isFile()) {
+            throw new GradleException("Mod JAR was not created: ${archive}")
+        }
+
+        def requiredEntries = [
+            'META-INF/mods.toml',
+            'dev/klewi/rpm/forge/ResourcePackManagerForge.class',
+            'dev/klewi/rpm/forge/ModrinthBrowserScreen.class'
+        ]
+
+        new java.util.zip.ZipFile(archive).withCloseable { zip ->
+            def missing = requiredEntries.findAll { zip.getEntry(it) == null }
+            if (!missing.isEmpty()) {
+                throw new GradleException("Mod JAR is missing required entries: ${missing.join(', ')}")
+            }
+        }
+
+        logger.lifecycle("Verified mod JAR: ${archive.name}")
+    }
+}

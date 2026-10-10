@@ -1,45 +1,44 @@
-# Holy Church — Forge 1.16.5
+# ResourcePack Manager — Forge
 
-Restored and expanded from the user-provided `holychurch_crucifix_bible_1.16.5(1).jar`.
+Client-side Minecraft Java mod for **Minecraft 1.21.11**, now built with **Minecraft Forge only**.
 
-## Current systems
-- Holy Crucifix: passive protection, monster slowing, temporary resistance barrier and cooldown.
-- Holy Bible: glint + protective resistance while held.
-- Holy Water: drink to cleanse potion effects and receive regeneration/resistance/fire resistance/night vision; sneak-right-click creates a small holy purification burst that damages monsters.
-- Master Key: opens Locked Chests.
-- Locked Chest: cannot be broken in survival without the Master Key.
-- Holy Ground block.
-- Priest profession + trades for Bible, Holy Water and Master Key.
-- A safe server-side ChurchFeature generator class is included for the next world-generation integration step.
+The active project is in `resourcepack-manager/forge/`. Older Fabric and NeoForge project folders are retained as legacy files but are no longer built by the ResourcePack Manager workflow. The repository also contains a separate older Holy Church Forge 1.16.5 project.
 
-## Removed legacy systems
-The restored project does not intentionally include Red Slime Essence, Sift/Candy/Infinite Water dimensions, Portal Gun/Portal GUI, Admin Gun, Knockback Stick, Jail Hammer or the old Crucifix ban/admin behavior.
+## Project details
+
+- **Minecraft:** 1.21.11
+- **Forge:** 61.2.0
+- **Java:** 21
+- **Gradle:** 9.6.0
+- **Mod version:** 0.2.0
+- **In-game key:** `K`
+
+## Features
+
+- Opens Minecraft's built-in resource-pack selection screen.
+- Featured links for Faithful 32x, Ashen, and Excalibur resource packs.
+- Featured links for Sodium, Lithium, FerriteCore, ImmediatelyFast, and Entity Culling.
+- Opens official Modrinth project pages in the browser.
+
+The catalog links to official project pages; it does not bundle or automatically install third-party files. Check each project's Minecraft version, Forge support, dependencies, and license before installing.
 
 ## Build
-Target: Minecraft 1.16.5, Forge 36.2.34, Java 8.
 
-Run from the project directory after installing a compatible Gradle/ForgeGradle environment:
-`gradle build`
+Install **JDK 21** and Gradle 9.6.0, then run:
 
-The compiled mod will be in `build/libs/`.
+```bash
+cd resourcepack-manager/forge
+gradle --no-daemon clean build
+```
 
+The resulting JAR is written to `resourcepack-manager/forge/build/libs/`. GitHub Actions builds the Forge project and uploads the JAR as an artifact.
 
-## Added in the Church expansion
-- 25x25 vanilla-block church with altar, library, crypt area and bell tower.
-- Strange Grass: edible fantasy food item. Eating it grants 30 seconds of Night Vision and 8 seconds of Nausea.
-- Church generation is attached to biome surface structures and is intentionally rare.
+## Status
 
+This is an early development build. The Gradle configuration and Forge-only CI workflow have been added, but the build must pass in GitHub Actions before the JAR can be considered verified.
 
-## v3 additions
-- Church altar that grants the Crucifix once per player.
-- Three persistent Church Guardians spawn around the altar.
-- Crypt chamber beneath the altar.
-- Church altar block/model/lang resources.
+## References
 
-
-## v4 additions
-- Church Priest is spawned inside generated churches and uses the custom profession.
-- Strange Grass has random supernatural side effects when eaten.
-- Church Guardians remain persistent around the altar.
-
-Build with Forge 1.16.5 MDK and Java 8.
+- [Forge 1.21.11 downloads and MDK](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.21.11.html)
+- [ForgeGradle 7 example project](https://github.com/MinecraftForge/MDKExamples/tree/master/traditional-mdk/fg7)
+- [Modrinth](https://modrinth.com/)

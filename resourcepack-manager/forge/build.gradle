@@ -96,7 +96,7 @@ def modJarArchive = modJarTask.flatMap { it.archiveFile }
 
 tasks.register('verifyModJar') {
     group = 'verification'
-    description = 'Checks that the built JAR contains the mod metadata and main client classes.'
+    description = 'Checks that the built JAR contains the mod metadata, resource pack metadata, and main client classes.'
     dependsOn modJarTask
     inputs.file(modJarArchive)
 
@@ -109,6 +109,7 @@ tasks.register('verifyModJar') {
 
         def requiredEntries = [
             'META-INF/mods.toml',
+            'pack.mcmeta',
             'dev/klewi/rpm/forge/ResourcePackManagerForge.class',
             'dev/klewi/rpm/forge/ModrinthBrowserScreen.class'
         ]

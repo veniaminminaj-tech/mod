@@ -32,7 +32,8 @@ public final class ModrinthBrowserScreen extends Screen {
     private final Screen parent;
     private EditBox searchBox;
     private final List<PackResult> results = new ArrayList<>();
-    private String status = "Search Modrinth for Minecraft 1.21.11 resource packs.";
+    private String status = "Search Modrinth for Minecraft 1.21.11 resource packs or Forge mods.";
+    private boolean modsMode;
     private int pageOffset;
 
     public ModrinthBrowserScreen(Screen parent) {
@@ -43,11 +44,12 @@ public final class ModrinthBrowserScreen extends Screen {
     @Override
     protected void init() {
         int cx = width / 2;
-        searchBox = new EditBox(font, cx - 155, 36, 230, 20, Component.literal("Search resource packs"));
-        searchBox.setHint(Component.literal("e.g. Faithful, medieval, PvP"));
+        addCategoryButton(cx);
+        searchBox = new EditBox(font, cx - 155, 58, 230, 20, Component.literal("Search Modrinth"));
+        searchBox.setHint(Component.literal(modsMode ? "e.g. Sodium, Lithium, performance" : "e.g. Faithful, medieval, PvP"));
         addRenderableWidget(searchBox);
         addRenderableWidget(Button.builder(Component.literal("Search"), b -> search())
-                .bounds(cx + 80, 36, 75, 20).build());
+                .bounds(cx + 80, 58, 75, 20).build());
 
         addRenderableWidget(Button.builder(Component.literal("Previous"), b -> {
             if (pageOffset > 0) { pageOffset -= 5; renderResults(); }
@@ -65,7 +67,9 @@ public final class ModrinthBrowserScreen extends Screen {
         status = "Searching Modrinth…";
         results.clear();
         pageOffset = 0;
-        String url = "https://api.modrinth.com/v2/search?facets=%5B%5B%22project_type%3Aresourcepack%22%5D%5D&limit=20&query="
+        String projectType = modsMode ? "mod" : "resourcepack";
+        String url = "https://api.modrinth.com/v2/search?facets=%5B%5B%22project_type%3A"
+                + projectType + "%22%5D%5D&limit=20&query="
                 + URLEncoder.encode(query, StandardCharsets.UTF_8);
         HttpRequest request = HttpRequest.newBuilder(URI.create(url))
                 .timeout(Duration.ofSeconds(20)).header("User-Agent", "KlewiResourcePackManager/0.3.0").GET().build();
@@ -105,17 +109,18 @@ public final class ModrinthBrowserScreen extends Screen {
         String currentQuery = searchBox == null ? "" : searchBox.getValue();
         clearWidgets();
         int cx = width / 2;
-        searchBox = new EditBox(font, cx - 155, 36, 230, 20, Component.literal("Search resource packs"));
+        addCategoryButton(cx);
+        searchBox = new EditBox(font, cx - 155, 58, 230, 20, Component.literal("Search Modrinth"));
         searchBox.setValue(currentQuery);
-        searchBox.setHint(Component.literal("e.g. Faithful, medieval, PvP"));
+        searchBox.setHint(Component.literal(modsMode ? "e.g. Sodium, Lithium, performance" : "e.g. Faithful, medieval, PvP"));
         addRenderableWidget(searchBox);
         addRenderableWidget(Button.builder(Component.literal("Search"), b -> search())
-                .bounds(cx + 80, 36, 75, 20).build());
+                .bounds(cx + 80, 58, 75, 20).build());
 
         int visible = Math.min(5, Math.max(0, results.size() - pageOffset));
         for (int i = 0; i < visible; i++) {
             PackResult result = results.get(pageOffset + i);
-            int y = 72 + i * 42;
+            int y = 94 + i * 42;
             addRenderableWidget(Button.builder(Component.literal("Download: " + trim(result.title, 34)), b -> download(result))
                     .bounds(cx - 155, y, 310, 20).build());
         }
@@ -125,8 +130,17 @@ public final class ModrinthBrowserScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal("Next"), b -> {
             if (pageOffset + 5 < results.size()) { pageOffset += 5; renderResults(); }
         }).bounds(cx - 45, height - 32, 90, 20).build());
-        addRenderableWidget(Button.builder(Component.literal("Back"), b -> Minecraft.getInstance().setScreen(parent))
+        addRenderableWidget(Button.builder(Component.literal("Exit"), b -> onClose())
                 .bounds(cx + 65, height - 32, 90, 20).build());
+    }
+
+    private void addCategoryButton(int cx) {
+        addRenderableWidget(Button.builder(
+                Component.literal(modsMode ? "Category: Mods (click for Resource Packs)" : "Category: Resource Packs (click for Mods)"),
+                button -> {
+                    modsMode = !modsMode;
+                    search();
+                }).bounds(cx - 155, 30, 310, 20).build());
     }
 
     private static String trim(String value, int max) {
@@ -136,7 +150,8 @@ public final class ModrinthBrowserScreen extends Screen {
     private void download(PackResult pack) {
         status = "Finding a compatible Forge file for " + pack.title + "…";
         String versionsUrl = "https://api.modrinth.com/v2/project/" + pack.projectId
-                + "/version?game_versions=%5B%221.21.11%22%5D&loaders=%5B%22forge%22%5D";
+                + "/version?game_versions=%5B%221.21.11%22%5D"
+                + (modsMode ? "&loaders=%5B%22forge%22%5D" : "");
         HttpRequest request = HttpRequest.newBuilder(URI.create(versionsUrl))
                 .timeout(Duration.ofSeconds(20)).header("User-Agent", "KlewiResourcePackManager/0.3.0").GET().build();
         HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString())
@@ -153,7 +168,9 @@ public final class ModrinthBrowserScreen extends Screen {
                     }
                     String fileUrl = chosen.get("url").getAsString();
                     String fileName = chosen.get("filename").getAsString();
-                    if (!fileName.toLowerCase().endsWith(".zip")) throw new IllegalStateException("Not a ZIP resource pack");
+                    String expectedExtension = modsMode ? ".jar" : ".zip";
+                    if (!fileName.toLowerCase().endsWith(expectedExtension))
+                        throw new IllegalStateException("Not a compatible " + (modsMode ? "mod JAR" : "resource pack ZIP"));
                     HttpRequest fileRequest = HttpRequest.newBuilder(URI.create(fileUrl))
                             .timeout(Duration.ofMinutes(2)).header("User-Agent", "KlewiResourcePackManager/0.3.0").GET().build();
                     try {
@@ -183,10 +200,10 @@ public final class ModrinthBrowserScreen extends Screen {
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
         renderBackground(graphics, mouseX, mouseY, delta);
         graphics.drawCenteredString(font, title, width / 2, 12, 0xFFFFFF);
-        graphics.drawCenteredString(font, status, width / 2, 61, 0xBBBBBB);
+        graphics.drawCenteredString(font, status, width / 2, 82, 0xBBBBBB);
         for (int i = 0; i < Math.min(5, results.size() - pageOffset); i++) {
             PackResult result = results.get(pageOffset + i);
-            int y = 96 + i * 42;
+            int y = 118 + i * 42;
             graphics.drawString(font, trim(result.title + " — " + result.description, Math.max(20, width / 6)), width / 2 - 150, y, 0xDDDDDD, false);
             if (!result.iconUrl.isBlank()) {
                 graphics.drawString(font, "Image: Modrinth thumbnail available", width / 2 - 150, y + 12, 0x888888, false);

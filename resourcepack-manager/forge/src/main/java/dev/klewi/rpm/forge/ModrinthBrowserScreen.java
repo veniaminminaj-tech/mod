@@ -55,7 +55,7 @@ public final class ModrinthBrowserScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal("Next"), b -> {
             if (pageOffset + 5 < results.size()) { pageOffset += 5; renderResults(); }
         }).bounds(cx - 45, height - 32, 90, 20).build());
-        addRenderableWidget(Button.builder(Component.literal("Back"), b -> Minecraft.getInstance().setScreen(parent))
+        addRenderableWidget(Button.builder(Component.literal("Exit"), b -> onClose())
                 .bounds(cx + 65, height - 32, 90, 20).build());
         search();
     }

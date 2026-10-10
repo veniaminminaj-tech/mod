@@ -249,8 +249,7 @@ public final class ResourcePackManagerForge {
                     open("https://modrinth.com/mod/entityculling"))
                     .bounds(centerX - 150, startY + 174, 300, 20).build());
 
-            addRenderableWidget(Button.builder(Component.literal("Back"), button ->
-                    Minecraft.getInstance().setScreen(parent))
+            addRenderableWidget(Button.builder(Component.literal("Exit"), button -> onClose())
                     .bounds(centerX - 150, startY + 204, 300, 20).build());
         }
 

@@ -82,13 +82,20 @@ tasks.named('jar', Jar).configure {
 
 
 // Verify the built artifact contains the essential Forge mod files.
+// Resolve task providers during configuration, not inside the task action, so
+// this task is compatible with Gradle's configuration cache.
+def modJarTask = tasks.named('jar', Jar)
+def modJarArchive = modJarTask.flatMap { it.archiveFile }
+
 tasks.register('verifyModJar') {
     group = 'verification'
     description = 'Checks that the built JAR contains the mod metadata and main client classes.'
-    dependsOn tasks.named('jar')
+    dependsOn modJarTask
+    inputs.file(modJarArchive)
 
     doLast {
-        def archive = tasks.named('jar', Jar).get().archiveFile.get().asFile
+        // Read the declared task input rather than looking up another task here.
+        def archive = inputs.files.singleFile
         if (!archive.isFile()) {
             throw new GradleException("Mod JAR was not created: ${archive}")
         }

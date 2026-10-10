@@ -175,7 +175,9 @@ public final class ModrinthBrowserScreen extends Screen {
                             .timeout(Duration.ofMinutes(2)).header("User-Agent", "KlewiResourcePackManager/0.3.0").GET().build();
                     try {
                         HttpResponse<InputStream> response = HTTP.send(fileRequest, HttpResponse.BodyHandlers.ofInputStream());
-                        Path targetDir = Minecraft.getInstance().getResourcePackDirectory();
+                        Path targetDir = modsMode
+                                ? Minecraft.getInstance().gameDirectory.toPath().resolve("mods")
+                                : Minecraft.getInstance().getResourcePackDirectory();
                         Files.createDirectories(targetDir);
                         Path target = targetDir.resolve(fileName).normalize();
                         if (!target.getParent().equals(targetDir.normalize())) throw new IllegalStateException("Invalid file name");

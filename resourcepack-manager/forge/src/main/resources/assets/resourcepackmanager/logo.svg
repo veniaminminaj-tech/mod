@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+<title id="title">ResourcePack Manager</title><desc id="desc">Pixel-art grass block with layered resource pack cards and a settings gear.</desc>
+<defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#23d9ff"/><stop offset="1" stop-color="#0875ed"/></linearGradient><linearGradient id="grass" x2="0" y2="1"><stop stop-color="#8cff38"/><stop offset="1" stop-color="#36b916"/></linearGradient></defs>
+<rect width="640" height="420" rx="28" fill="#101827"/>
+<g stroke="#07121e" stroke-width="9" stroke-linejoin="round">
+<path d="M350 56 L472 18 L588 82 L588 276 L350 151 Z" fill="#12c8e8"/><path d="M303 83 L425 45 L541 109 L541 303 L303 178 Z" fill="#b52cf2"/><path d="M256 109 L378 71 L494 135 L494 329 L256 204 Z" fill="#65e82d"/>
+<path d="M256 127 L378 89 L494 153 L494 240 L256 115 Z" fill="url(#sky)" stroke="none"/>
+<path d="M80 220 L277 125 L440 218 L241 318 Z" fill="url(#grass)"/><path d="M80 220 L241 318 L241 389 L80 291 Z" fill="#9c5528"/><path d="M241 318 L440 218 L440 288 L241 389 Z" fill="#633019"/>
+</g>
+<g opacity=".65" stroke="#153e17" stroke-width="2"><path d="M113 237l42-20 33 19-42 21zM177 267l42-20 33 19-42 21zM241 297l42-20 33 19-42 21zM305 267l42-20 33 19-42 21zM369 237l42-20 33 19-42 21z" fill="#b2ff55"/><path d="M100 246l0 24 29 17v-24zM143 271l0 24 29 17v-24zM185 297l0 24 29 17v-24zM270 303v24l-29 15v-24zM312 282v24l-29 15v-24zM355 260v24l-29 15v-24z" fill="#633019"/></g>
+<g transform="translate(470 310)" stroke="#07121e" stroke-width="9" stroke-linejoin="round"><path d="M-16-62h32l8 20 18 7 18-10 23 23-10 18 7 18 20 8v32l-20 8-7 18 10 18-23 23-18-10-18 7-8 20h-32l-8-20-18-7-18 10-23-23 10-18-7-18-20-8v-32l20-8 7-18-10-18 23-23 18 10 18-7z" fill="#9aa9c8"/><circle r="28" fill="#101827"/><circle r="13" fill="#23324b"/></g>
+<text x="30" y="38" fill="#eaf6ff" font-family="Verdana,sans-serif" font-size="20" font-weight="700">RESOURCEPACK MANAGER</text></svg>
